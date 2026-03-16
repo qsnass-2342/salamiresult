@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Quiz Dashboard · Dark</title>
-    <!-- Firebase compat (v9) for simplicity -->
+    <title>Firebase Quiz Console · Dark</title>
+    <!-- Firebase compat (v9) -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <style>
@@ -12,14 +12,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background-color: #121212;
-            color: #e0e0e0;
-            padding: 2rem 1.5rem;
+            background-color: #0b0c10;
+            color: #eef2f5;
+            padding: 2.2rem 2rem;
             min-height: 100vh;
+            line-height: 1.5;
         }
 
         .container {
@@ -27,257 +28,167 @@
             margin: 0 auto;
         }
 
+        /* headings – no emoji, clean */
         h1 {
-            font-weight: 500;
-            font-size: 2rem;
+            font-weight: 450;
+            font-size: 2.2rem;
             letter-spacing: -0.02em;
-            margin-bottom: 2rem;
-            border-left: 6px solid #bb86fc;
-            padding-left: 1rem;
+            margin-bottom: 2.5rem;
+            border-left: 5px solid #7b9acc;
+            padding-left: 1.2rem;
             color: #ffffff;
         }
 
         h2 {
-            font-weight: 500;
-            font-size: 1.6rem;
-            margin: 2rem 0 1rem 0;
+            font-weight: 450;
+            font-size: 1.7rem;
+            margin: 0 0 1.2rem 0;
             color: #ffffff;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            border-bottom: 1px solid #2a3a4a;
+            padding-bottom: 0.5rem;
         }
 
-        h2 i {
-            color: #bb86fc;
-            font-style: normal;
-            font-size: 1.4rem;
-        }
-
-        /* cards for sections (subtle background) */
+        /* cards for sections – subtle, readable */
         .section-card {
-            background: #1e1e1e;
+            background: #16212b;
             border-radius: 24px;
-            padding: 1.8rem 1.5rem;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-            border: 1px solid #2c2c2c;
+            padding: 2rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.7);
+            border: 1px solid #2a3f50;
         }
 
         /* search row */
-        .search-bar {
+        .search-wrapper {
             display: flex;
             align-items: center;
-            margin-bottom: 1.8rem;
-            background: #2a2a2a;
+            margin-bottom: 2rem;
+            background: #1e2c38;
             border-radius: 40px;
-            padding: 0.3rem 0.3rem 0.3rem 1.5rem;
-            max-width: 400px;
-            border: 1px solid #3e3e3e;
+            padding: 0.2rem 0.2rem 0.2rem 1.5rem;
+            max-width: 380px;
+            border: 1px solid #3a5060;
+            transition: 0.15s;
         }
-        .search-bar i {
-            color: #aaa;
-            font-size: 1.2rem;
-            margin-right: 0.5rem;
+        .search-wrapper:focus-within {
+            border-color: #7b9acc;
+            box-shadow: 0 0 0 2px #1f3a4b;
         }
-        .search-bar input {
+        .search-icon {
+            color: #9bb8da;
+            font-size: 1rem;
+            margin-right: 0.75rem;
+            opacity: 0.8;
+        }
+        .search-wrapper input {
             background: transparent;
             border: none;
-            color: #f0f0f0;
+            color: #f0f5fa;
             font-size: 1rem;
-            padding: 0.7rem 0;
+            padding: 0.8rem 0;
             width: 100%;
             outline: none;
         }
-        .search-bar input::placeholder {
-            color: #777;
+        .search-wrapper input::placeholder {
+            color: #7f95ab;
+            font-weight: 300;
         }
 
         /* tables */
-        .table-wrapper {
+        .table-responsive {
             overflow-x: auto;
             border-radius: 18px;
-            background: #1a1a1a;
-            border: 1px solid #2c2c2c;
+            background: #0f1a21;
+            border: 1px solid #253a48;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.95rem;
-            min-width: 600px;
+            min-width: 550px;
         }
 
         th {
             text-align: left;
-            padding: 1.2rem 1rem;
-            background-color: #242424;
-            color: #bb86fc;
+            padding: 1.2rem 1.2rem;
+            background-color: #1b2b36;
+            color: #b6d0e8;
             font-weight: 500;
             letter-spacing: 0.02em;
             white-space: nowrap;
+            border-bottom: 2px solid #2f4858;
         }
 
         td {
-            padding: 1rem 1rem;
-            border-bottom: 1px solid #2e2e2e;
-            color: #d0d0d0;
+            padding: 1.1rem 1.2rem;
+            border-bottom: 1px solid #263b48;
+            color: #dbe9f5;
         }
 
         tr:last-child td {
             border-bottom: none;
         }
 
-        /* buttons */
-        .btn-view {
-            background: #2a2a2a;
-            border: 1px solid #bb86fc40;
-            color: #bb86fc;
-            padding: 0.5rem 1.2rem;
+        /* small tags / labels */
+        .label-tag {
+            background: #1e3240;
+            padding: 0.3rem 0.9rem;
             border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .btn-view:hover {
-            background: #bb86fc;
-            color: #121212;
-            border-color: #bb86fc;
-        }
-
-        .btn-close {
-            background: transparent;
-            border: 1px solid #555;
-            color: #ccc;
-            padding: 0.6rem 1.8rem;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-close:hover {
-            background: #333;
-            border-color: #777;
-        }
-
-        /* modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(3px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            visibility: hidden;
-            opacity: 0;
-            transition: 0.2s ease;
-        }
-
-        .modal-overlay.show {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .modal-content {
-            background: #1e1e1e;
-            width: 90%;
-            max-width: 700px;
-            max-height: 80vh;
-            border-radius: 32px;
-            padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-            border: 1px solid #333;
-            color: #e0e0e0;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        .modal-header h3 {
-            font-size: 1.7rem;
-            font-weight: 500;
-            color: white;
-        }
-        .modal-header .close-icon {
-            font-size: 2rem;
-            line-height: 1;
-            cursor: pointer;
-            color: #aaa;
-        }
-        .modal-header .close-icon:hover {
-            color: white;
-        }
-
-        .qa-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-        .qa-item {
-            background: #2a2a2a;
-            border-radius: 20px;
-            padding: 1.2rem 1.5rem;
-            border-left: 4px solid #bb86fc;
-        }
-        .question {
-            font-weight: 500;
-            color: white;
-            margin-bottom: 0.5rem;
-        }
-        .answer {
-            color: #bb86fc;
-            background: #1e1e1e;
+            font-size: 0.8rem;
+            color: #cbdae6;
             display: inline-block;
-            padding: 0.3rem 1rem;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            border: 1px solid #bb86fc30;
+            font-weight: 400;
+            border: 1px solid #345066;
+        }
+
+        .timestamp {
+            color: #a0bedb;
+            font-size: 0.85rem;
+            font-weight: 300;
         }
 
         .loading-row td {
             text-align: center;
             padding: 3rem;
-            color: #888;
+            color: #9eb7cf;
+            font-style: italic;
         }
 
-        .badge {
-            background: #2c2c2c;
-            padding: 0.2rem 0.8rem;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            color: #ccc;
+        /* numeric values */
+        .value-number {
+            font-weight: 450;
+            color: #e1efff;
         }
 
-        .timestamp {
-            color: #aaa;
-            font-size: 0.85rem;
+        /* subtle hover */
+        tbody tr:hover td {
+            background-color: #1c2e3c;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>📋 Quiz & attempts · firehouse</h1>
+    <h1>Quiz · attempts console</h1>
 
-    <!-- QUIZZES section -->
+    <!-- QUIZZES section (no action column) -->
     <div class="section-card">
-        <h2><i>📄</i> Quizzes</h2>
-        <div class="table-wrapper">
-            <table id="quizzes-table">
+        <h2>Quizzes</h2>
+        <div class="table-responsive">
+            <table>
                 <thead>
-                    <tr><th>Giver name</th><th>Gender</th><th>Max salami</th><th>Created at</th><th>Action</th></tr>
+                    <tr>
+                        <th>Giver name</th>
+                        <th>Gender</th>
+                        <th>Max salami</th>
+                        <th>Created at</th>
+                    </tr>
                 </thead>
                 <tbody id="quizzes-body">
-                    <tr class="loading-row"><td colspan="5">⏳ loading quizzes...</td></tr>
+                    <tr class="loading-row"><td colspan="4">Loading quizzes ...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -285,43 +196,32 @@
 
     <!-- ATTEMPTS section with search -->
     <div class="section-card">
-        <h2><i>🎯</i> Attempts</h2>
-        <div class="search-bar">
-            <i>🔍</i>
-            <input type="text" id="search-attempts" placeholder="Search by giver name (from linked quiz)" autocomplete="off">
+        <h2>Attempts</h2>
+        <div class="search-wrapper">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="search-attempts" placeholder="Search by giver name (from quiz)" autocomplete="off">
         </div>
-        <div class="table-wrapper">
-            <table id="attempts-table">
+        <div class="table-responsive">
+            <table>
                 <thead>
-                    <tr><th>Giver name</th><th>Receiver name</th><th>Salami amount</th><th>Timestamp</th></tr>
+                    <tr>
+                        <th>Giver name</th>
+                        <th>Receiver name</th>
+                        <th>Salami amount</th>
+                        <th>Timestamp</th>
+                    </tr>
                 </thead>
                 <tbody id="attempts-body">
-                    <tr class="loading-row"><td colspan="4">⏳ loading attempts...</td></tr>
+                    <tr class="loading-row"><td colspan="4">Loading attempts ...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<!-- MODAL for quiz details (questions & correct answers) -->
-<div class="modal-overlay" id="quizModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>📌 Quiz questions</h3>
-            <span class="close-icon" id="closeModalBtn">&times;</span>
-        </div>
-        <div id="modal-body" class="qa-list">
-            <!-- dynamically injected Q&A pairs -->
-        </div>
-        <div style="text-align: right; margin-top: 2rem;">
-            <button class="btn-close" id="closeModalFooterBtn">Close</button>
-        </div>
-    </div>
-</div>
-
 <script>
     (function() {
-        // 1. Firebase config (provided)
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBntFpfU0pXRC9q7-mVeMP3Nhqb44Gaens",
             authDomain: "quiz-cbd2d.firebaseapp.com",
@@ -331,40 +231,51 @@
             appId: "1:152233779471:web:18df8375f7cd5389c89e7a"
         };
 
-        // Initialize Firebase (compat)
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // References to DOM elements
+        // DOM elements
         const quizzesBody = document.getElementById('quizzes-body');
         const attemptsBody = document.getElementById('attempts-body');
         const searchInput = document.getElementById('search-attempts');
-        const modalOverlay = document.getElementById('quizModal');
-        const modalBody = document.getElementById('modal-body');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const closeModalFooterBtn = document.getElementById('closeModalFooterBtn');
 
-        // Data stores
-        let quizzesMap = new Map();           // quizId -> {giverName, gender, maxSalami, createdAt, selectedQuestions, correctAnswers}
-        let attemptsRaw = [];                  // store combined { giverName, receiverName, salamiAmount, timestamp }
+        // Store quizzes by ID for later join
+        const quizzesMap = new Map();   // quizId -> { giverName, gender, maxSalami, createdAt }
+
+        // Raw attempts data (with resolved giverName)
+        let attemptsRaw = [];
         let filteredAttempts = [];
 
-        // helper: format Firestore timestamp
+        // Helper: format Firestore timestamp
         function formatDate(timestamp) {
-            if (!timestamp) return 'N/A';
+            if (!timestamp) return '—';
             if (timestamp?.toDate) {
                 const d = timestamp.toDate();
-                return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', year: 'numeric' });
+                return d.toLocaleString('en-US', { 
+                    month: 'short', day: 'numeric', year: 'numeric', 
+                    hour: '2-digit', minute: '2-digit' 
+                });
             }
-            return String(timestamp); // fallback
+            return String(timestamp);
         }
 
-        // Load quizzes first, then attempts (since attempts need quiz lookup)
+        // Escape for safety (though content is trusted)
+        function escapeHtml(unsafe) {
+            if (unsafe == null) return '';
+            return String(unsafe)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Load quizzes first (populate map and table)
         async function loadQuizzes() {
             try {
                 const snapshot = await db.collection('quizzes').get();
                 if (snapshot.empty) {
-                    quizzesBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">📭 No quizzes found</td></tr>`;
+                    quizzesBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No quizzes found</td></tr>`;
                     return;
                 }
 
@@ -372,69 +283,55 @@
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     const docId = doc.id;
-                    // store in map (including selectedQuestions, correctAnswers for modal)
+                    // store minimal data needed for attempts join
                     quizzesMap.set(docId, {
-                        giverName: data.giverName || '—',
+                        giverName: data.giverName || 'Unknown',
                         gender: data.gender || '—',
-                        maxSalami: data.maxSalami || 0,
+                        maxSalami: data.maxSalami ?? 0,
                         createdAt: data.createdAt || null,
-                        selectedQuestions: data.selectedQuestions || [],
-                        correctAnswers: data.correctAnswers || []
                     });
 
-                    // row for quizzes table
+                    // quizzes table row (no action)
                     const createdStr = formatDate(data.createdAt);
                     htmlRows += `<tr>
-                        <td><span class="badge">👤</span> ${escapeHtml(data.giverName) || '—'}</td>
+                        <td><span class="label-tag">${escapeHtml(data.giverName) || '—'}</span></td>
                         <td>${escapeHtml(data.gender) || '—'}</td>
-                        <td>🍖 ${data.maxSalami ?? 0}</td>
+                        <td class="value-number">${data.maxSalami ?? 0}</td>
                         <td class="timestamp">${createdStr}</td>
-                        <td><button class="btn-view" data-quiz-id="${docId}">🔍 view quiz</button></td>
                     </tr>`;
                 });
                 quizzesBody.innerHTML = htmlRows;
-
-                // attach event listeners to view buttons
-                document.querySelectorAll('.btn-view[data-quiz-id]').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const quizId = e.target.closest('.btn-view').dataset.quizId;
-                        openQuizModal(quizId);
-                    });
-                });
-
             } catch (error) {
                 console.error('Error loading quizzes:', error);
-                quizzesBody.innerHTML = `<tr><td colspan="5" style="color:#cf6679;">❌ Error loading quizzes</td></tr>`;
+                quizzesBody.innerHTML = `<tr><td colspan="4" style="color:#cf6679;">Failed to load quizzes</td></tr>`;
             }
         }
 
-        // Load attempts and join with quizzes data
+        // Load attempts, join with quiz data, and render
         async function loadAttempts() {
             try {
                 const snapshot = await db.collection('attempts').get();
                 if (snapshot.empty) {
-                    attemptsBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">📭 No attempts found</td></tr>`;
+                    attemptsBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No attempts recorded</td></tr>`;
                     return;
                 }
 
                 attemptsRaw = [];
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    const quizId = data.quizId;   // reference to quizzes doc id
-                    const quizData = quizzesMap.get(quizId) || {};
-                    const giverName = quizData.giverName || '❌ unknown quiz';
+                    const quizId = data.quizId;
+                    const quizInfo = quizzesMap.get(quizId) || { giverName: '— (missing quiz)' };
 
                     const attemptItem = {
-                        giverName: giverName,
+                        giverName: quizInfo.giverName || '—',
                         receiverName: data.receiverName || '—',
                         salamiAmount: data.salamiAmount ?? 0,
                         timestamp: data.timestamp || null,
-                        // keep raw timestamp for sorting (optional)
                     };
                     attemptsRaw.push(attemptItem);
                 });
 
-                // sort by timestamp descending (most recent first) if timestamp exists
+                // sort by timestamp descending (newest first)
                 attemptsRaw.sort((a, b) => {
                     const ta = a.timestamp?.toDate?.() || 0;
                     const tb = b.timestamp?.toDate?.() || 0;
@@ -445,14 +342,14 @@
                 renderAttemptsTable(filteredAttempts);
             } catch (error) {
                 console.error('Error loading attempts:', error);
-                attemptsBody.innerHTML = `<tr><td colspan="4" style="color:#cf6679;">❌ Error loading attempts</td></tr>`;
+                attemptsBody.innerHTML = `<tr><td colspan="4" style="color:#cf6679;">Error loading attempts</td></tr>`;
             }
         }
 
-        // render attempts table based on filtered list
+        // Render attempts table based on array
         function renderAttemptsTable(attempts) {
             if (!attempts.length) {
-                attemptsBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:2rem;">🔍 No matching attempts</td></tr>`;
+                attemptsBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:2.5rem;">No matching attempts</td></tr>`;
                 return;
             }
 
@@ -460,90 +357,40 @@
             attempts.forEach(att => {
                 const timeStr = formatDate(att.timestamp);
                 rows += `<tr>
-                    <td>👥 ${escapeHtml(att.giverName)}</td>
-                    <td>📛 ${escapeHtml(att.receiverName)}</td>
-                    <td>💰 ${att.salamiAmount}</td>
-                    <td class="timestamp">⏱️ ${timeStr}</td>
+                    <td><span class="label-tag">${escapeHtml(att.giverName)}</span></td>
+                    <td>${escapeHtml(att.receiverName)}</td>
+                    <td class="value-number">${att.salamiAmount}</td>
+                    <td class="timestamp">${timeStr}</td>
                 </tr>`;
             });
             attemptsBody.innerHTML = rows;
         }
 
-        // search filter
+        // Filter attempts by giverName (case‑insensitive)
         function filterAttempts(searchTerm) {
-            if (!searchTerm.trim()) {
+            const term = searchTerm.trim().toLowerCase();
+            if (term === '') {
                 filteredAttempts = [...attemptsRaw];
             } else {
-                const term = searchTerm.trim().toLowerCase();
-                filteredAttempts = attemptsRaw.filter(item => 
+                filteredAttempts = attemptsRaw.filter(item =>
                     item.giverName.toLowerCase().includes(term)
                 );
             }
             renderAttemptsTable(filteredAttempts);
         }
 
-        // escape html for safety
-        function escapeHtml(unsafe) {
-            if (unsafe === undefined || unsafe === null) return '';
-            return String(unsafe)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-        // open modal and populate with questions & correct answers
-        function openQuizModal(quizId) {
-            const quiz = quizzesMap.get(quizId);
-            if (!quiz) return;
-
-            const questions = quiz.selectedQuestions || [];
-            const answers = quiz.correctAnswers || [];
-            modalBody.innerHTML = ''; // clear
-
-            if (questions.length === 0) {
-                modalBody.innerHTML = '<div class="qa-item" style="color:#aaa;">No questions in this quiz.</div>';
-            } else {
-                // loop through questions, assume answers array corresponds by index
-                questions.forEach((q, index) => {
-                    const ans = (answers && answers[index]) ? answers[index] : '❌ no answer';
-                    const qDiv = document.createElement('div');
-                    qDiv.className = 'qa-item';
-                    qDiv.innerHTML = `<div class="question">Q${index+1}: ${escapeHtml(q)}</div>
-                                      <div class="answer">✅ ${escapeHtml(ans)}</div>`;
-                    modalBody.appendChild(qDiv);
-                });
-            }
-
-            // show modal
-            modalOverlay.classList.add('show');
-        }
-
-        // close modal
-        function closeModal() {
-            modalOverlay.classList.remove('show');
-        }
-
-        // --- event listeners ---
+        // Search input handler
         searchInput.addEventListener('input', (e) => {
             filterAttempts(e.target.value);
         });
 
-        closeModalBtn.addEventListener('click', closeModal);
-        closeModalFooterBtn.addEventListener('click', closeModal);
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) closeModal();
-        });
-
-        // INIT: load quizzes, then attempts
+        // Initialize: load quizzes, then attempts (order matters)
         (async function init() {
-            await loadQuizzes();       // fills quizzesMap
-            await loadAttempts();      // uses map to build attempts
+            await loadQuizzes();
+            await loadAttempts();
         })();
 
     })();
 </script>
-<!-- ensure any potential xss is escaped, but we already escape -->
 </body>
 </html>
